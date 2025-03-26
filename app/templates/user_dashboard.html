@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center">User Dashboard</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>Subjects</h2>
+            <ul class="list-group">
+                {% for subject in subjects %}
+                    <li class="list-group-item">
+                        <a href="{{ url_for('main.subject_quizzes', subject_id=subject.id) }}">
+                            {{ subject.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

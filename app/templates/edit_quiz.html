@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center">Edit Quiz</h1>
+    <form method="POST">
+        <div class="form-group">
+            <label for="quiz_chapter_id">Chapter</label>
+            <select class="form-control" id="quiz_chapter_id" name="quiz_chapter_id" required>
+                {% for chapter in chapters %}
+                    <option value="{{ chapter.id }}" {% if chapter.id == quiz.chapter_id %}selected{% endif %}>{{ chapter.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="quiz_date">Date of Quiz</label>
+            <input type="date" class="form-control" id="quiz_date" name="quiz_date" value="{{ quiz.date_of_quiz }}" required>
+        </div>
+        <div class="form-group">
+            <label for="quiz_duration">Time Duration (HH:MM)</label>
+            <input type="text" class="form-control" id="quiz_duration" name="quiz_duration" value="{{ quiz.time_duration }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Quiz</button>
+        <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

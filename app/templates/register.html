@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 class="text-center">Register</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+                <small id="username-error" class="text-danger" style="display: none;"></small>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="full_name">Full Name</label>
+                <input type="text" class="form-control" id="full_name" name="full_name" required>
+            </div>
+            <div class="form-group">
+                <label for="qualification">Qualification</label>
+                <input type="text" class="form-control" id="qualification" name="qualification" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" name="dob" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Register</button>
+        </form>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const usernameInput = document.getElementById('username');
+    const usernameError = document.getElementById('username-error');
+
+    usernameInput.addEventListener('blur', function () {
+        const username = usernameInput.value;
+
+        if (username) {
+            fetch(`/check-username?username=${username}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        usernameError.textContent = 'Username already exists. Please choose a different username.';
+                        usernameError.style.display = 'block';
+                    } else {
+                        usernameError.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking username:', error);
+                });
+        } else {
+            usernameError.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

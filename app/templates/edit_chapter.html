@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center">Edit Chapter</h1>
+    <form method="POST">
+        <div class="form-group">
+            <label for="chapter_name">Chapter Name</label>
+            <input type="text" class="form-control" id="chapter_name" name="chapter_name" value="{{ chapter.name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="chapter_description">Description</label>
+            <textarea class="form-control" id="chapter_description" name="chapter_description" required>{{ chapter.description }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="subject_id">Subject</label>
+            <select class="form-control" id="subject_id" name="subject_id" required>
+                {% for subject in subjects %}
+                    <option value="{{ subject.id }}" {% if subject.id == chapter.subject_id %}selected{% endif %}>{{ subject.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Chapter</button>
+        <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

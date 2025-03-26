@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="home-header">
+    <h1>Welcome to Quiz Master</h1>
+    <p>Prepare for your exams with our interactive quizzes!</p>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 text-center">
+            <h2>Get Started</h2>
+            <p>Register or log in to start taking quizzes.</p>
+            <a href="{{ url_for('main.register') }}" class="btn btn-primary">Register</a>
+            <a href="{{ url_for('main.login') }}" class="btn btn-primary">Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

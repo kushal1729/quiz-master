@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center">Admin Dashboard</h1>
+
+    <!-- Search Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>Search</h2>
+            <form method="GET" action="{{ url_for('main.admin_dashboard') }}">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="search" placeholder="Search users, subjects, or quizzes" value="{{ search_query }}">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Subject Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>Create Subject</h2>
+            <form method="POST" action="{{ url_for('main.create_subject') }}">
+                <div class="form-group">
+                    <label for="subject_name">Subject Name</label>
+                    <input type="text" class="form-control" id="subject_name" name="subject_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject_description">Description</label>
+                    <textarea class="form-control" id="subject_description" name="subject_description" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Subject</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Subjects List -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>Subjects</h2>
+            <ul>
+                {% for subject in subjects %}
+                    <li>
+                        {{ subject.name }} - {{ subject.description }}
+                        <a href="{{ url_for('main.edit_subject', subject_id=subject.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                        <form method="POST" action="{{ url_for('main.delete_subject', subject_id=subject.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this subject?');">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Create Chapter Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>Create Chapter</h2>
+            <form method="POST" action="{{ url_for('main.create_chapter') }}">
+                <div class="form-group">
+                    <label for="chapter_name">Chapter Name</label>
+                    <input type="text" class="form-control" id="chapter_name" name="chapter_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="chapter_description">Description</label>
+                    <textarea class="form-control" id="chapter_description" name="chapter_description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="subject_id">Subject</label>
+                    <select class="form-control" id="subject_id" name="subject_id" required>
+                        {% for subject in subjects %}
+                            <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Chapter</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chapters List -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>Chapters</h2>
+            <ul>
+                {% for chapter in chapters %}
+                    <li>
+                        {{ chapter.name }} - {{ chapter.description }}
+                        <a href="{{ url_for('main.edit_chapter', chapter_id=chapter.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                        <form method="POST" action="{{ url_for('main.delete_chapter', chapter_id=chapter.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this chapter?');">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Create Quiz Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>Create Quiz</h2>
+            <form method="POST" action="{{ url_for('main.create_quiz') }}">
+                <div class="form-group">
+                    <label for="quiz_chapter_id">Chapter</label>
+                    <select class="form-control" id="quiz_chapter_id" name="quiz_chapter_id" required>
+                        {% for chapter in chapters %}
+                            <option value="{{ chapter.id }}">{{ chapter.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="quiz_date">Date of Quiz</label>
+                    <input type="date" class="form-control" id="quiz_date" name="quiz_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="quiz_duration">Time Duration (HH:MM)</label>
+                    <input type="text" class="form-control" id="quiz_duration" name="quiz_duration" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Quiz</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quizzes List -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>Quizzes</h2>
+            <ul>
+                {% for quiz in quizzes %}
+                    <li>
+                        {{ quiz.chapter.name }} - {{ quiz.date_of_quiz }} ({{ quiz.time_duration }})
+                        <a href="{{ url_for('main.edit_quiz', quiz_id=quiz.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                        <form method="POST" action="{{ url_for('main.delete_quiz', quiz_id=quiz.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this quiz?');">Delete</button>
+                        </form>
+
+                        <!-- Collapsible Questions Section -->
+                        <button class="btn btn-sm btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#questions-{{ quiz.id }}" aria-expanded="false" aria-controls="questions-{{ quiz.id }}">
+                            View Questions
+                        </button>
+                        <div class="collapse" id="questions-{{ quiz.id }}">
+                            <div class="card card-body mt-2">
+                                <h5>Questions for {{ quiz.chapter.name }} - {{ quiz.date_of_quiz }}</h5>
+                                <ul>
+                                    {% for question in questions_by_quiz[quiz.id] %}
+                                        <li>
+                                            <strong>Question:</strong> {{ question.question_statement }}<br>
+                                            <strong>Options:</strong>
+                                            <ol>
+                                                <li>{{ question.option1 }}</li>
+                                                <li>{{ question.option2 }}</li>
+                                                <li>{{ question.option3 }}</li>
+                                                <li>{{ question.option4 }}</li>
+                                            </ol>
+                                            <strong>Correct Option:</strong> {{ question.correct_option }}<br>
+                                            <a href="{{ url_for('main.edit_question', question_id=question.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                            <form method="POST" action="{{ url_for('main.delete_question', question_id=question.id) }}" style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this question?');">Delete</button>
+                                            </form>
+                                        </li>
+                                        <hr>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Add Question Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>Add Questions to Quiz</h2>
+            <form method="POST" action="{{ url_for('main.add_question') }}">
+                <div class="form-group">
+                    <label for="quiz_id">Select Quiz</label>
+                    <select class="form-control" id="quiz_id" name="quiz_id" required>
+                        {% for quiz in quizzes %}
+                            <option value="{{ quiz.id }}">{{ quiz.chapter.name }} - {{ quiz.date_of_quiz }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="question_statement">Question Statement</label>
+                    <textarea class="form-control" id="question_statement" name="question_statement" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="option1">Option 1</label>
+                    <input type="text" class="form-control" id="option1" name="option1" required>
+                </div>
+                <div class="form-group">
+                    <label for="option2">Option 2</label>
+                    <input type="text" class="form-control" id="option2" name="option2" required>
+                </div>
+                <div class="form-group">
+                    <label for="option3">Option 3</label>
+                    <input type="text" class="form-control" id="option3" name="option3" required>
+                </div>
+                <div class="form-group">
+                    <label for="option4">Option 4</label>
+                    <input type="text" class="form-control" id="option4" name="option4" required>
+                </div>
+                <div class="form-group">
+                    <label for="correct_option">Correct Option</label>
+                    <select class="form-control" id="correct_option" name="correct_option" required>
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
+                        <option value="option3">Option 3</option>
+                        <option value="option4">Option 4</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Question</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Performance Chart -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>User Performance</h2>
+            <canvas id="userPerformanceChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Manage Users Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>Manage Users</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Qualification</th>
+                        <th>Date of Birth</th>
+                        <th>Quizzes Attempted</th>
+                        <th>Scores</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.full_name }}</td>
+                            <td>{{ user.qualification }}</td>
+                            <td>{{ user.dob }}</td>
+                            <td>
+                                {% if user_scores[user.id] %}
+                                    {{ user_scores[user.id]|length }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user_scores[user.id] %}
+                                    <ul>
+                                        {% for score in user_scores[user.id] %}
+                                            <li>
+                                                Quiz: {{ score.quiz.chapter.name }} - Score: {{ score.total_scored }}/{{ score.quiz.questions|length }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    No quizzes attempted.
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ url_for('main.delete_user', user_id=user.id) }}" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('userPerformanceChart').getContext('2d');
+    const userChartData = JSON.parse('{{ user_chart_data | safe }}');
+    const userLabels = userChartData.map(item => item.username);
+    const userScores = userChartData.map(item => item.total_score);
+
+    const userPerformanceChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: userLabels,
+            datasets: [{
+                label: 'Total Score',
+                data: userScores,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Total Score'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Users'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
