@@ -1,3 +1,19 @@
+## 🚀 Live Demo
+
+Try the application live here:  
+👉 **[Quiz Master – Live App](https://quiz-master-kggt.onrender.com/)**
+
+This is a fully working deployment of the Quiz Master app.  
+- 👨‍🎓 Students can register, log in, and take quizzes
+- 🧑‍💼 Admins can manage quizzes and monitor performance
+- ⏳ Features a real-time countdown timer and analytics
+
+> ⚠️ First load may take 20–30 seconds as the server on Render free tier spins up.
+
+Give it a try 🎯
+
+
+
 Quiz Master
 
 Quiz Master is a multi-user quiz management web application designed to provide an interactive and efficient platform for exam preparation. It enables users to take quizzes across various subjects and chapters while providing administrators with tools to manage content and monitor performance visually.
