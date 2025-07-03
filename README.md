@@ -126,3 +126,17 @@ pip install -r requirements.txt
 
 # Run the application
 python app.py
+
+```
+
+🙋‍♂️ Author
+Kushal Yarlagadda
+
+B.Tech, Amrita Vishwa Vidyapeetham
+
+B.Sc. Data Science, IIT Madras
+
+🔗 [LinkedIn](https://www.linkedin.com/in/kushalyarlagadda/)
+
+📬 kushalyarlagadda1729@gmail.com
+
