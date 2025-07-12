@@ -9,17 +9,18 @@ import re  # For validation
 from flask import Blueprint
 from app import db
 
-@main.route('/initdb')
-def initdb():
-    db.create_all()
-    return "Database tables created"
 
 main = Blueprint('main', __name__)
 
 @main.route('/')
 def home():
     return render_template('home.html')
-
+    
+@main.route('/initdb')
+def initdb():
+    db.create_all()
+    return "Database tables created"
+    
 @main.route('/admin/dashboard', methods=['GET', 'POST'])
 @login_required
 def admin_dashboard():
