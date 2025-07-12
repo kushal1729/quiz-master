@@ -1,7 +1,7 @@
 ## 🚀 Live Demo
 
 Try the application live here:  
-👉 **[Quiz Master – Live App](https://quiz-master-kggt.onrender.com/)**
+👉 **[Quiz Master – Live App](https://quiz-master-1-lvte.onrender.com)**
 
 This is a fully working deployment of the Quiz Master app.  
 - 👨‍🎓 Students can register, log in, and take quizzes
