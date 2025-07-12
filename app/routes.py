@@ -15,7 +15,28 @@ main = Blueprint('main', __name__)
 @main.route('/')
 def home():
     return render_template('home.html')
+
+@main.route('/initdb')
+def initdb():
+    db.create_all()
+    return "Database tables created"
     
+@main.route('/initadmin')
+def init_admin():
+    if not User.query.filter_by(username='admin').first():
+        admin_user = User(
+            username='admin',
+            password=generate_password_hash('admin123'),
+            full_name='Admin User',
+            qualification='Admin',
+            dob='2005-04-15',
+            is_admin=True
+        )
+        db.session.add(admin_user)
+        db.session.commit()
+        return "✅ Admin created with username: admin and password: admin123"
+    return "Admin already exists"
+
 @main.route('/admin/dashboard', methods=['GET', 'POST'])
 @login_required
 def admin_dashboard():
