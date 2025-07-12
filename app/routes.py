@@ -6,6 +6,13 @@ from app import db
 from datetime import datetime 
 import json
 import re  # For validation
+from flask import Blueprint
+from app import db
+
+@main.route('/initdb')
+def initdb():
+    db.create_all()
+    return "Database tables created"
 
 main = Blueprint('main', __name__)
 
