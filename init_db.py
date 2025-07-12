@@ -5,12 +5,7 @@ from werkzeug.security import generate_password_hash
 app = create_app()
 app.app_context().push()
 
-# ⚠️ WARNING: This will delete all tables and data!
-print("⚠️ Dropping all tables...")
-db.drop_all()
 
-# Recreate tables
-print("✅ Recreating tables...")
 db.create_all()
 
 # Create admin
