@@ -26,7 +26,8 @@ class Chapter(db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
-    quizzes = db.relationship('Quiz', backref='chapter_quizzes', lazy=True)  
+    quizzes = db.relationship('Quiz', backref='chapter_quizzes', overlaps="chapter,quiz_chapters")
+
 
 class Quiz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,7 +35,8 @@ class Quiz(db.Model):
     date_of_quiz = db.Column(db.String(10), nullable=False)
     time_duration = db.Column(db.String(5), nullable=False)
     questions = db.relationship('Question', backref='quiz', lazy=True)
-    chapter = db.relationship('Chapter', backref='quiz_chapters')  
+    chapter = db.relationship('Chapter', backref='quiz_chapters', overlaps="chapter_quizzes,quizzes")
+
 
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
