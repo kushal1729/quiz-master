@@ -8,7 +8,7 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(60), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
     full_name = db.Column(db.String(100), nullable=False)
     qualification = db.Column(db.String(100), nullable=False)
     dob = db.Column(db.String(10), nullable=False)
