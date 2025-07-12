@@ -6,8 +6,6 @@ from app import db
 from datetime import datetime 
 import json
 import re  # For validation
-from flask import Blueprint
-from app import db
 
 
 main = Blueprint('main', __name__)
