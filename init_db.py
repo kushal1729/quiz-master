@@ -5,11 +5,15 @@ from werkzeug.security import generate_password_hash
 app = create_app()
 app.app_context().push()
 
-# Create DB tables
-db.create_all()
-print("✅ Tables created")
+# ⚠️ WARNING: This will delete all tables and data!
+print("⚠️ Dropping all tables...")
+db.drop_all()
 
-# Add admin if not exists
+# Recreate tables
+print("✅ Recreating tables...")
+db.create_all()
+
+# Create admin
 if not User.query.filter_by(username='admin').first():
     admin = User(
         username='admin',
